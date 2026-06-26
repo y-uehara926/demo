@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Boot + MySQL Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #f0f4f8;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a365d 0%, #2b6cb0 100%);
+            color: white;
+            padding: 2rem 3rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        header p {
+            margin-top: 0.4rem;
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.2rem 1.8rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stats-badge {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            padding: 0.4rem 1rem;
+            border-radius: 6px;
+        }
+
+        .stats-label {
+            font-size: 0.95rem;
+            color: #718096;
+        }
+
+        .table-wrapper {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #2b6cb0;
+            color: white;
+        }
+
+        thead th {
+            padding: 0.9rem 1.2rem;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #e2e8f0;
+            transition: background 0.15s;
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        tbody td {
+            padding: 0.9rem 1.2rem;
+            font-size: 0.95rem;
+        }
+
+        .id-cell {
+            color: #a0aec0;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #a0aec0;
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🌿 Spring Boot + MySQL Demo</h1>
+    <p>データベースからユーザー情報を取得して表示するサンプルアプリです</p>
+</header>
+
+<div class="container">
+
+    <!-- 件数表示 -->
+    <div class="stats-card">
+        <span class="stats-badge" th:text="${count}">0</span>
+        <span class="stats-label">件のユーザーデータが取得されました（usersテーブル）</span>
+    </div>
+
+    <!-- ユーザーテーブル -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>名前</th>
+                    <th>メールアドレス</th>
+                    <th>メッセージ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- データがある場合 -->
+                <tr th:each="user : ${users}">
+                    <td class="id-cell" th:text="${user.id}">1</td>
+                    <td th:text="${user.name}">山田 太郎</td>
+                    <td th:text="${user.email}">yamada@example.com</td>
+                    <td th:text="${user.message != null ? user.message : '—'}">こんにちは</td>
+                </tr>
+                <!-- データがない場合 -->
+                <tr th:if="${#lists.isEmpty(users)}">
+                    <td colspan="4">
+                        <div class="empty-state">
+                            <div class="icon">📭</div>
+                            <p>データがありません。<br>init.sql を実行してサンプルデータを投入してください。</p>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<footer>
+    Spring Boot 3.2 &nbsp;|&nbsp; Java 17 &nbsp;|&nbsp; MySQL &nbsp;|&nbsp; Thymeleaf
+</footer>
+
+</body>
+</html>
